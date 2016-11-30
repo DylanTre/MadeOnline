@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Web Service - Test Page</title>
+    <meta charset="utf-8" />
+    <meta charset="utf-8" />
+    <link href="StyleSheet.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="localConfig.js"></script>
+    <script src="utils.js"></script>
+    <script>
+
+        function drawTabella(data) {
+            var str = '';
+            str += "<table>"
+            str += "<tr><th>Codice</th><th>Soggetto</th><th>Serie</th><th>Collocazione</th><th>File</th></tr>"
+            for (var i in data) {
+                str += '<tr>';
+                str += '<td>' + data[i].codice + '</td>';
+                str += '<td>' + data[i].soggetto_titolo + '</td>';
+                str += '<td>' + data[i].id_album + '</td>';
+                str += '<td>' + data[i].serie_num_ord + '</td>';
+                str += '<td>' + data[i].file_path + '</td>';
+                str += '<tr>';
+            }
+            str += "<table>"
+            $("#bookmark").html(str);
+        }
+
+
+        function getVersion() {
+            $.get(MaDe_Config.server_REST + "/Version", function (data) {
+                $("#bookmark").html(data);
+            });
+        }
+
+        function getAll() {
+            $.get(MaDe_Config.server_REST +"/"+MaDe_Config.guid+"/Dati", function (data) {
+                drawTabella(data);
+            });
+        }
+
+        function getCodice(id) {
+            $.get(MaDe_Config.server_REST + "/Dati/Codice/" + id, function (data) {
+                drawTabella(data);
+            });
+        }
+
+        function getSerieTitoli() {
+            $.get(MaDe_Config.server_REST + "/Serie", function (data) {
+                var str = '';
+
+                str += "<table>"
+                str += "<tr><th>ID Serie</th><th>Titolo delle serie</th></tr>"
+                for (var i in data) {
+                    str += '<tr>';
+                    str += '<td>' + data[i].id_serie + '</td>';
+                    str += '<td>' + data[i].serie_titolo + '</td>';
+                    str += '<tr>';
+                }
+                str += "<table>"
+
+                $("#bookmark").html(str);
+            });
+        }
+
+        function getFotoAll() {
+            $.get(MaDe_Config.server_REST + "/Dati", function (data) {
+                var str = '';
+                str += "<table>"
+                str += "<tr><th>ID Serie</th><th>Collocazione</th><th>Titolo delle serie</th><th>Serie Path</th></tr>"
+                for (var i in data) {
+
+                    var path = makeImgPath(data[i].file_path);
+                    var ico64 = makeIco64Path(data[i].file_path);
+
+                    str += '<tr>';
+                    str += '<td>' + data[i].id_album + '</td>';
+                    str += '<td>' + data[i].serie_num_ord + '</td>';
+                    str += '<td>' + data[i].soggetto + '</td>';
+                    str += '<td><a href="' + path + '" target="_blank" ><img src="' + ico64 + '" ></a></td>';
+                    str += '<tr>';
+                }
+                str += "<table>"
+
+                $("#bookmark").html(str);
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <center>
+        <h1>Progetto "MaDe"</h1>
+        <h2>Museo della guerra Web Service - Test Page</h2>
+        <script>
+            document.write("<h2>Web Service = " + MaDe_Config.server_REST + "</h2>")
+        </script>
+        <hr />
+        <input id="Button1" class="butt" type="button" value="Get HELP" onclick="getHelp()" />
+        <input id="Button1" class="butt" type="button" value="Get Version" onclick="getVersion()" />
+        <input id="Button1" class="butt" type="button" value="Dati (tutto)" onclick="getAll()" />
+        <input id="Button1" class="butt" type="button" value="Foto (img)" onclick="getFotoAll()" />
+        <input id="Button1" class="butt" type="button" value="Dati (codice=700)" onclick="getCodice(700)" />
+        <input id="Button1" class="butt" type="button" value="Serie (Titoli)" onclick="getSerieTitoli()" />
+        <br />
+        <hr />
+        <br />
+        <div id="bookmark">
+            ... segnaposto ...
+        </div>
+        <br />
+        <hr />
+    </center>
+    <script>
+    </script>
+</body>
+</html>

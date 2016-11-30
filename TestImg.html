@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Web Service - Test Page</title>
+    <meta charset="utf-8" />
+    <meta charset="utf-8" />
+    <link href="StyleSheet.css" rel="stylesheet" />
+    <script src="JavaScript.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="localConfig.js"></script>
+    <script src="utils.js"></script>
+    <script>
+
+        function drawTabella(data) {
+
+
+
+            var str = '';
+            str += "<table style='width:1200px; float:none; text-align:center;'>"
+            //str += "<tr><th>Titolo</th><th>Foto</th></tr>"
+            for (var i in data) {
+                var path = makeImgPath(data[i].file_path);
+                var ico64 = makeIco64Path(data[i].file_path);
+                str += '<tr><td class="titolo">' + data[i].soggetto_titolo + '</td></tr>';
+                str += '<tr><td><a href="' + path + '" target="_blank" ><img src="' + path + '" ></a></td></tr>';
+            }
+            str += "</table>"
+            $("#bookmark").html(str);
+        }
+    </script>
+</head>
+<body>
+    <center>
+        <h1>Progetto "MaDe"</h1>
+        <h2>Museo della guerra Web Service - Test Page</h2>
+        <script>
+            document.write("<h2>Web Service = " + MaDe_Config.server_REST + "</h2>")
+            $(document).ready(function () {
+                $.getJSON(MaDe_Config.server_REST + "/Dati", function (data) {
+                    drawTabella(data);
+                })
+            });
+        </script>
+        <hr />
+        <input id="Precedente" class="butt" type="button" value="<--" />
+        <input id="Successivo" class="butt" type="button" value="-->" />
+        <br />
+        <hr />
+        <br />
+        <div id="bookmark">
+            ... segnaposto ...
+        </div>
+        <br />
+        <hr />
+    </center>
+</body>
+</html>
