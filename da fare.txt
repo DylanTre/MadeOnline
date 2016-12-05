@@ -1,7 +1,0 @@
-x Osservazioni
-
-- Server virtuale http://MaDe.marconirovereto.it
-- Aprire altre porte da utilizzare per ws di test es: 8081, 55001, 55002 
-- Impedire il browsing delle cartelle foto
-- In modalità pubblica limitare il numero massimo di tuple per query (esempio max 100) per impedire che venga scaricato l'intero archivio foto
-
