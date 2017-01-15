@@ -30,13 +30,12 @@ function addTitoli() {
     return s;
 }
 
-
 function addRiga(r) {
     //var path = makeImgPath(data[i].file_path);
     //var ico64 = makeIco64Path(data[i].file_path);
     var tmp = "";
-    var data = PrendiData();
-
+   var data = PrendiData();
+   
     s = '<tr>';
     for (var i in data) {
         s += '<td class="txtCenter">';
@@ -46,7 +45,7 @@ function addRiga(r) {
         else if (data[i].fieldname == 'serie') {
             s += getPath(r.id_serie, "Serie", 'id_serie', 'serie_titolo')
         }
-        else {
+        else if(data[i].fieldname=='collocazione') {
             s += eval('r' + '.' + data[i].fieldname);
         }
         s += '</td>';

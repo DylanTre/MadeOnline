@@ -1,27 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MaDe.Home", ".", "{F18E900D-1E7E-4E7A-8829-F7CA8F16EC0B}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_32529"
-		Debug.AspNetCompiler.PhysicalPath = "..\MaDe.Home\"
+		Debug.AspNetCompiler.PhysicalPath = "..\MaDeMu-Gruppo3-\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_32529\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_32529"
-		Release.AspNetCompiler.PhysicalPath = "..\MaDe.Home\"
+		Release.AspNetCompiler.PhysicalPath = "..\MaDeMu-Gruppo3-\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_32529\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "32529"
-		SlnRelativePath = "..\MaDe.Home\"
+		SlnRelativePath = "..\MaDeMu-Gruppo3-\"
 	EndProjectSection
 EndProject
 Global
