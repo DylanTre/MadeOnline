@@ -4,11 +4,11 @@ function Storage(foto) {
     var displayFoto = new Array();
     for (var i in foto) {
         if (foto[i].visibile) {
-        displayFoto.push(foto[i].codice)
+            displayFoto.push(foto[i].codice)
         }
     }
     sessionStorage.idFoto = JSON.stringify(displayFoto);
-    console.log(displayFoto);
+    //console.log(displayFoto);
 
 }
 
@@ -39,9 +39,53 @@ function azzeraRicerca() {
     $("#filtro_Periodo").html("");
     $("#filtro_Serie").html("");
     $("#filtro_Fondo").html("");
+    $("#filtro_TipoMedia").html("");
+    $("#filtro_TipoScheda").html("");
+    $("#filtro_Archivio").html("");
+    $("#filtro_NumInventario").html("");
+
+    //DA FARE CB
+    //$("#filtro_SoggDescrizione").html("");
+    //DA FARE CB
+    //$("#filtro_SoggSpecifiche").html("");
+
+    $("#filtro_NumNegativo").html("");
+    $("#filtro_AltriFormati").html("");
+
+    //da modificare
+    $("#filtro_SerieTitolo").html("");
+    $("#filtro_SerieNumOrd").html("");
+    //DA FARE CB
+    //$("filtro_Condizione").html("");
+    //DA FARE COME PERIODO
+    $("#filtro_DataEsecDa").html("");
+    //DA FARE CB
+    //$("#filtro_DataEsecDaValid"); })
+    //DA FARE COME PERIODO
+    $("#filtro_DataEsecA").html("");
+    $("#filtro_DataEsecAValid").html("");
+    $("#filtro_Osservazioni").html("");
+    $("#filtro_FondoProvenienza").html("");
+    $("#filtro_FondoProvenienzaLuogo").html("");
+    $("#filtro_AcquisizioneData").html("");
+
+    //DA FARE CB
+    $("#filtro_AcquisizioneDataValida").html("");
+    //DA FARE CB
+    //$("#filtro_AcquisizioneTipo").html("");
+    //DA FARE CB
+    //$("#filtro_Copyright").html("");
+
+    $("#filtro_Inventari").html("");
+    $("#filtro_Committenza").html("");
+    $("#filtro_TipoSupporto").html("");
+    $("#filtro_IdenVolume").html("");
+    $("#btn_annotazioni").html("");
+
     for (var i in foto) {
         foto[i].visibile = true;
     }
+    Storage();
     showContatore();
 }
 
@@ -74,7 +118,7 @@ function filtraSoggetto() {
     $("#filtro_txtSoggetto").append(s + ' ');
     switch ($("#Tipo_ricerca").val()) {
         //AND
-        case 0:
+        case "0":
             for (var i in foto) {
                 if (foto[i].visibile) {
                     trovato = foto[i].soggetto.includes(s) || foto[i].soggetto_titolo.includes(s);
@@ -84,61 +128,21 @@ function filtraSoggetto() {
                 }
             }
             break;
-            //OR
-        case 1:
+        //OR
+        case "1":
             for (var i in foto) {
-                trovato = foto[i].soggetto.includes(s) || foto[i].soggetto_titolo.includes(s);
-                if (!trovato) {
-                    foto[i].visibile = false;
-                }
+                    trovato = foto[i].soggetto.includes(s) || foto[i].soggetto_titolo.includes(s);
+                    if (!trovato) {
+                        foto[i].visibile = false;
+                    }
             }
             break;
     }
 
-    Storage(foto);
+    Storage();
     showContatore();
     Tabella();
 }
-
-//function filtraAlbum() {
-//    num = parseInt($("#cbAlbum").val());
-//    $("#filtro_cbAlbum").append(num + ' ');
-//    console.log("entrato");
-//    if (num >= 0) {
-
-//        switch ($("#Tipo_ricerca").val()) {
-//            //AND
-//            case "0":
-
-//                for (var i in foto) {
-//                    console.log(foto[i]);
-//                    if (foto[i].visibile) {
-//                        trovato = foto[i].id_album == num;
-//                        if (!trovato) {
-//                            foto[i].visibile = false;
-//                        }
-//                    }
-//                }
-//                break;
-//            //OR
-//            case "1":
-//                console.log("1");
-//                for (var i in foto) {
-//                    if (foto[i].id_album == num)
-//                    //    foto[i].visibile = true;
-//                    //else
-//                        foto[i].visibile = false;
-//                }
-//                break;
-//        }
-//    }
-//    else {
-//        alert("Album non valido!")
-//    }
-
-//    showContatore();
-//    Tabella();
-//}
 function filtraAlbum() {
 
     num = parseInt($("#cbAlbum").val());
@@ -177,7 +181,7 @@ function filtraAlbum() {
     else {
         alert("Album non valido!")
     }
-    Storage(foto);
+    Storage();
     showContatore();
     Tabella();
 }
@@ -205,21 +209,20 @@ function filtraPeriodo() {
             //OR
         case "1":
             for (var i in foto) {
-                fdmin = Data_ISO10(new Date(foto[i].data_da));
-                fdmax = Data_ISO10(new Date(foto[i].data_a));
-                trovato = fdmin >= sdMin && fdmax <= sdMax;
-                if (!trovato) {
-                    foto[i].visibile = false;
-                }
+                    fdmin = Data_ISO10(new Date(foto[i].data_da));
+                    fdmax = Data_ISO10(new Date(foto[i].data_a));
+                    trovato = fdmin >= sdMin && fdmax <= sdMax;
+                    if (!trovato) {
+                        foto[i].visibile = false;
+                    }
             }
             break;
     }
-
-    Storage(foto);
+    
+    Storage();
     showContatore();
     Tabella();
 }
-
 function filtraFondo() {
     switch ($("#Tipo_ricerca").val()) {
         //AND
@@ -234,13 +237,14 @@ function filtraFondo() {
             //OR
         case "1":
             for (var i in foto) {
-                if (foto[i].id_fondo != $("#cbFondo").val())
-                    foto[i].visibile = false;
+                    if (foto[i].id_fondo != $("#cbFondo").val())
+                        foto[i].visibile = false;
             }
             break;
     }
-
+    
     $("#filtro_Fondo").append($("#cbFondo option:selected").text() + ' ');
+    Storage();
     showContatore();
     Tabella();
 }
@@ -258,17 +262,21 @@ function filtraSerie() {
             //OR
         case "1":
             for (var i in foto) {
-                if (foto[i].id_serie != $("#cbSerie").val())
-                    foto[i].visibile = false;
+                    if (foto[i].id_serie != $("#cbSerie").val())
+                        foto[i].visibile = false;
             }
             break;
     }
 
     $("#filtro_Serie").append($("#cbSerie option:selected").text() + ' ');
+    Storage();
     showContatore();
     Tabella();
 }
 function filtro_Generico(campo, id_txt, id_filtro) {
+
+    $("#" + id_filtro).append($("#" + id_txt).val() + ' ');
+
     switch ($("#Tipo_ricerca").val()) {
         //AND
         case "0":
@@ -281,15 +289,25 @@ function filtro_Generico(campo, id_txt, id_filtro) {
             break;
             //OR
         case "1":
+            res = $("#" + id_filtro).text().split(" ");
+            console.log("res"+res);
             for (var i in foto) {
-                if (eval('foto[i]' + '.' + campo) == $("#" + id_txt).val())
-                    foto[i].visibile = true;
-            }
-            break;
-    }
+                for (var j = 0; j < res.length - 1; j++) {
+                    trovato = eval('foto[i]' + '.' + campo) == res[j];
+                   // console.log(eval('foto[i]' + '.' + campo) +"||||"+ eval($("#" + id_txt).val())+"||||"+trovato);
+                    if (trovato) {
+                        foto[i].visibile = true;
+                        break;
+                    }
+                        
+                }
+                if(!trovato)
+                    foto[i].visibile = false;
+                //console.log(eval('foto[i]' + '.' + campo) + "||f||" + eval($("#" + id_txt).val()) + "||||" + trovato);
 
-    $("#" + id_filtro).append($("#" + id_txt).val() + ' ');
-    Storage(foto);
+                }
+    }
+    Storage();
     showContatore();
     Tabella();
 }
@@ -754,4 +772,3 @@ function creaFiltro() {
             Filtro_Publ();
     }
 }
-

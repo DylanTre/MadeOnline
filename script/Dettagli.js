@@ -49,11 +49,9 @@ $(document).ready(function () {
 
 function test(data) {
     var path = makeImgPath("/Dati/Codice/" + listaCodici[index]);
-
-    console.log(path);
     //var out = '<img src="' + path + '" >';
 
-    var out = 'Cod: ' + data[0].codice + ' album: ' + data[0].id_album + ' <img src="' + path + '" >';
+    var out = 'Cod: ' + data[0].codice + 'album: ' + data[0].id_album + '<img src="' + path + '" >';
 
     $('#dettaglio').html(out);
 }
