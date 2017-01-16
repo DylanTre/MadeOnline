@@ -4,11 +4,11 @@ function Storage(foto) {
     var displayFoto = new Array();
     for (var i in foto) {
         if (foto[i].visibile) {
-            displayFoto.push(foto[i].codice)
+        displayFoto.push(foto[i].codice)
         }
     }
     sessionStorage.idFoto = JSON.stringify(displayFoto);
-    //console.log(displayFoto);
+    console.log(displayFoto);
 
 }
 
@@ -42,8 +42,6 @@ function azzeraRicerca() {
     for (var i in foto) {
         foto[i].visibile = true;
     }
-    //giusto?
-    Storage();
     showContatore();
 }
 
@@ -86,22 +84,61 @@ function filtraSoggetto() {
                 }
             }
             break;
-        //OR
+            //OR
         case 1:
             for (var i in foto) {
-                    trovato = foto[i].soggetto.includes(s) || foto[i].soggetto_titolo.includes(s);
-                    if (!trovato) {
-                        foto[i].visibile = false;
-                    }
+                trovato = foto[i].soggetto.includes(s) || foto[i].soggetto_titolo.includes(s);
+                if (!trovato) {
+                    foto[i].visibile = false;
+                }
             }
             break;
     }
 
-    Storage();
+    Storage(foto);
     showContatore();
     Tabella();
 }
 
+//function filtraAlbum() {
+//    num = parseInt($("#cbAlbum").val());
+//    $("#filtro_cbAlbum").append(num + ' ');
+//    console.log("entrato");
+//    if (num >= 0) {
+
+//        switch ($("#Tipo_ricerca").val()) {
+//            //AND
+//            case "0":
+
+//                for (var i in foto) {
+//                    console.log(foto[i]);
+//                    if (foto[i].visibile) {
+//                        trovato = foto[i].id_album == num;
+//                        if (!trovato) {
+//                            foto[i].visibile = false;
+//                        }
+//                    }
+//                }
+//                break;
+//            //OR
+//            case "1":
+//                console.log("1");
+//                for (var i in foto) {
+//                    if (foto[i].id_album == num)
+//                    //    foto[i].visibile = true;
+//                    //else
+//                        foto[i].visibile = false;
+//                }
+//                break;
+//        }
+//    }
+//    else {
+//        alert("Album non valido!")
+//    }
+
+//    showContatore();
+//    Tabella();
+//}
 function filtraAlbum() {
 
     num = parseInt($("#cbAlbum").val());
@@ -120,31 +157,30 @@ function filtraAlbum() {
                     }
                 }
                 break;
-            //OR
+                //OR
             case "1":
                 var res = []
-                res= $("#filtro_cbAlbum").text().split(" ");
-                    for (var i in foto) {
-                        for (var j = 0; j < res.length-1; j++) {
-                            if (foto[i].id_album == res[j]) {
-                                foto[i].visibile = true;
-                                break;
-                            } else {
-                                foto[i].visibile = false;
-                            }
-                        }                                                  
+                res = $("#filtro_cbAlbum").text().split(" ");
+                for (var i in foto) {
+                    for (var j = 0; j < res.length - 1; j++) {
+                        if (foto[i].id_album == res[j]) {
+                            foto[i].visibile = true;
+                            break;
+                        } else {
+                            foto[i].visibile = false;
+                        }
                     }
+                }
                 break;
         }
     }
     else {
         alert("Album non valido!")
     }
-    Storage();
+    Storage(foto);
     showContatore();
     Tabella();
 }
-
 function filtraPeriodo() {
 
     sdMin = $("#dMin").val();
@@ -154,7 +190,7 @@ function filtraPeriodo() {
 
     switch ($("#Tipo_ricerca").val()) {
         //AND
-        case 0:
+        case "0":
             for (var i in foto) {
                 if (foto[i].visibile) {
                     fdmin = Data_ISO10(new Date(foto[i].data_da));
@@ -167,19 +203,19 @@ function filtraPeriodo() {
             }
             break;
             //OR
-        case 1:
+        case "1":
             for (var i in foto) {
-                    fdmin = Data_ISO10(new Date(foto[i].data_da));
-                    fdmax = Data_ISO10(new Date(foto[i].data_a));
-                    trovato = fdmin >= sdMin && fdmax <= sdMax;
-                    if (!trovato) {
-                        foto[i].visibile = false;
-                    }
+                fdmin = Data_ISO10(new Date(foto[i].data_da));
+                fdmax = Data_ISO10(new Date(foto[i].data_a));
+                trovato = fdmin >= sdMin && fdmax <= sdMax;
+                if (!trovato) {
+                    foto[i].visibile = false;
+                }
             }
             break;
     }
-    
-    Storage();
+
+    Storage(foto);
     showContatore();
     Tabella();
 }
@@ -187,7 +223,7 @@ function filtraPeriodo() {
 function filtraFondo() {
     switch ($("#Tipo_ricerca").val()) {
         //AND
-        case 0:
+        case "0":
             for (var i in foto) {
                 if (foto[i].visibile) {
                     if (foto[i].id_fondo != $("#cbFondo").val())
@@ -196,23 +232,22 @@ function filtraFondo() {
             }
             break;
             //OR
-        case 1:
+        case "1":
             for (var i in foto) {
-                    if (foto[i].id_fondo != $("#cbFondo").val())
-                        foto[i].visibile = false;
+                if (foto[i].id_fondo != $("#cbFondo").val())
+                    foto[i].visibile = false;
             }
             break;
     }
-    
+
     $("#filtro_Fondo").append($("#cbFondo option:selected").text() + ' ');
     showContatore();
     Tabella();
-    Storage();
 }
 function filtraSerie() {
     switch ($("#Tipo_ricerca").val()) {
         //AND
-        case 0:
+        case "0":
             for (var i in foto) {
                 if (foto[i].visibile) {
                     if (foto[i].id_serie != $("#cbSerie").val())
@@ -221,10 +256,10 @@ function filtraSerie() {
             }
             break;
             //OR
-        case 1:
+        case "1":
             for (var i in foto) {
-                    if (foto[i].id_serie != $("#cbSerie").val())
-                        foto[i].visibile = false;
+                if (foto[i].id_serie != $("#cbSerie").val())
+                    foto[i].visibile = false;
             }
             break;
     }
@@ -232,14 +267,11 @@ function filtraSerie() {
     $("#filtro_Serie").append($("#cbSerie option:selected").text() + ' ');
     showContatore();
     Tabella();
-    Storage();
 }
-
-
 function filtro_Generico(campo, id_txt, id_filtro) {
     switch ($("#Tipo_ricerca").val()) {
         //AND
-        case 0:
+        case "0":
             for (var i in foto) {
                 if (foto[i].visibile) {
                     if (eval('foto[i]' + '.' + campo) != $("#" + id_txt).val())
@@ -248,7 +280,7 @@ function filtro_Generico(campo, id_txt, id_filtro) {
             }
             break;
             //OR
-        case 1:
+        case "1":
             for (var i in foto) {
                 if (eval('foto[i]' + '.' + campo) == $("#" + id_txt).val())
                     foto[i].visibile = true;
@@ -257,9 +289,9 @@ function filtro_Generico(campo, id_txt, id_filtro) {
     }
 
     $("#" + id_filtro).append($("#" + id_txt).val() + ' ');
+    Storage(foto);
     showContatore();
     Tabella();
-    Storage();
 }
 function Tabella() {
     var str = '';
@@ -722,3 +754,4 @@ function creaFiltro() {
             Filtro_Publ();
     }
 }
+
