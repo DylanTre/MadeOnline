@@ -42,6 +42,7 @@ function azzeraRicerca() {
     for (var i in foto) {
         foto[i].visibile = true;
     }
+    Storage();
     showContatore();
 }
 
@@ -95,7 +96,7 @@ function filtraSoggetto() {
             break;
     }
 
-
+    Storage();
     showContatore();
     Tabella();
 }
@@ -141,18 +142,12 @@ function filtraSoggetto() {
 //}
 function filtraAlbum(campo,id_cb, id_filtro) {
 
-    if (id_cb == "cbAlbum") {
-        num = parseInt($("#" + id_cb).val());
-        $("#" + id_filtro).append(num + ' ; ');
+    num = parseInt($("#" + id_cb).val());
+    $("#" + id_filtro).append(num + ' ; ');
 
-        if (num < 0) {
-            alert("Album non valido!")
-            return
-        }
-    } else {
-        num = $("#" + id_cb).val();
-        $("#" + id_filtro).append($("#" + id_cb + " option:selected").text() + ' ');
-
+    if (num < 0) {
+        alert("Album non valido!")
+        return
     }
 
     switch ($("#Tipo_ricerca").val()) {
@@ -221,59 +216,61 @@ function filtraPeriodo() {
             break;
     }
 
-
+    Storage();
     showContatore();
     Tabella();
 }
 
-function filtraFondo() {
-    switch ($("#Tipo_ricerca").val()) {
-        //AND
-        case "0":
-            for (var i in foto) {
-                if (foto[i].visibile) {
-                    if (foto[i].id_fondo != $("#cbFondo").val())
-                        foto[i].visibile = false;
-                }
-            }
-            break;
-            //OR
-        case "1":
-            for (var i in foto) {
-                if (foto[i].id_fondo != $("#cbFondo").val())
-                    foto[i].visibile = false;
-            }
-            break;
-    }
+//function filtraFondo() {
+//    switch ($("#Tipo_ricerca").val()) {
+//        //AND
+//        case "0":
+//            for (var i in foto) {
+//                if (foto[i].visibile) {
+//                    if (foto[i].id_fondo != $("#cbFondo").val())
+//                        foto[i].visibile = false;
+//                }
+//            }
+//            break;
+//            //OR
+//        case "1":
+//            for (var i in foto) {
+//                if (foto[i].id_fondo != $("#cbFondo").val())
+//                    foto[i].visibile = false;
+//            }
+//            break;
+//    }
 
-    $("#filtro_Fondo").append($("#cbFondo option:selected").text() + ' ; ');
-    showContatore();
-    Tabella();
-}
-function filtraSerie() {
-    switch ($("#Tipo_ricerca").val()) {
-        //AND
-        case "0":
-            for (var i in foto) {
-                if (foto[i].visibile) {
-                    if (foto[i].id_serie != $("#cbSerie").val())
-                        foto[i].visibile = false;
-                }
-            }
-            break;
-            //OR
-        case "1":
-            for (var i in foto) {
-                if (foto[i].id_serie != $("#cbSerie").val())
-                    foto[i].visibile = false;
-            }
-            break;
-    }
+//    $("#filtro_Fondo").append($("#cbFondo option:selected").text() + ' ; ');
+//    Storage();
+//    showContatore();
+//    Tabella();
+//}
+//function filtraSerie() {
+//    switch ($("#Tipo_ricerca").val()) {
+//        //AND
+//        case "0":
+//            for (var i in foto) {
+//                if (foto[i].visibile) {
+//                    if (foto[i].id_serie != $("#cbSerie").val())
+//                        foto[i].visibile = false;
+//                }
+//            }
+//            break;
+//            //OR
+//        case "1":
+//            for (var i in foto) {
+//                if (foto[i].id_serie != $("#cbSerie").val())
+//                    foto[i].visibile = false;
+//            }
+//            break;
+//    }
 
-    $("#filtro_Serie").append($("#cbSerie option:selected").text() + ' ; ');
-    showContatore();
-    Tabella();
-}
+//    $("#filtro_Serie").append($("#cbSerie option:selected").text() + ' ; ');
+//    Storage();
+//    showContatore();
+//    Tabella();
+//}
 function filtro_Generico(campo, id_txt, id_filtro) {
     var combo = false;
     
@@ -314,6 +311,7 @@ function filtro_Generico(campo, id_txt, id_filtro) {
 
 
     }
+    Storage();
     showContatore();
     Tabella();
 }
@@ -423,7 +421,7 @@ function Filtro_Publ() {
                 s += '            <td>'
                 s += '                <select id="cbSerie">'
                 serie.forEach(function (item, index) {
-                    s += '<option value="' + index + '">Serie ' + item + '</option>'
+                    s += '<option value="' + item + '">Serie ' + item + '</option>'
                 });
                 s += '                </select>'
                 s += '</td>'
@@ -563,7 +561,7 @@ function Filtro_Priv() {
                 s += '            <td>'
                 s += '                <select id="cbSerie">'
                 serie.forEach(function (item, index) {
-                    s += '<option value="' + index + '">Serie ' + item + '</option>'
+                    s += '<option value="' + item + '">Serie ' + item + '</option>'
                 });
                 s += '                </select>'
                 s += '</td>'
