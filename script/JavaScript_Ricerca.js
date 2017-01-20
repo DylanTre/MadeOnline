@@ -28,64 +28,20 @@ function showContatore() {
 function azzeraRicerca() {
     $("#bookmark").hide();
 
-    $("#txtSoggetto").val("");
-    $("#cbAlbum").val("-1");
+    //cancello tutte le textbox
+    $("#filtro").find("input[type=text]").val('');
+    //cancello tutte le combobox
+    $('[id^=cb]').val("-1");
+    //cancello tutti i filtri aggiunti
+    $('td[id^=filtro]').text("");
+
     $("#dMin").val("1914-01-01");
     $("#dMax").val("1918-12-31");
 
-    $("#filtro_Codice").html("");
-    $("#filtro_cbAlbum").html("");
-    $("#filtro_txtSoggetto").html("");
-    $("#filtro_Periodo").html("");
-    $("#filtro_Serie").html("");
-    $("#filtro_Fondo").html("");
-    $("#filtro_TipoMedia").html("");
-    $("#filtro_TipoScheda").html("");
-    $("#filtro_Archivio").html("");
-    $("#filtro_NumInventario").html("");
-
-    //DA FARE CB
-    //$("#filtro_SoggDescrizione").html("");
-    //DA FARE CB
-    //$("#filtro_SoggSpecifiche").html("");
-
-    $("#filtro_NumNegativo").html("");
-    $("#filtro_AltriFormati").html("");
-
-    //da modificare
-    $("#filtro_SerieTitolo").html("");
-    $("#filtro_SerieNumOrd").html("");
-    //DA FARE CB
-    //$("filtro_Condizione").html("");
-    //DA FARE COME PERIODO
-    $("#filtro_DataEsecDa").html("");
-    //DA FARE CB
-    //$("#filtro_DataEsecDaValid"); })
-    //DA FARE COME PERIODO
-    $("#filtro_DataEsecA").html("");
-    $("#filtro_DataEsecAValid").html("");
-    $("#filtro_Osservazioni").html("");
-    $("#filtro_FondoProvenienza").html("");
-    $("#filtro_FondoProvenienzaLuogo").html("");
-    $("#filtro_AcquisizioneData").html("");
-
-    //DA FARE CB
-    $("#filtro_AcquisizioneDataValida").html("");
-    //DA FARE CB
-    //$("#filtro_AcquisizioneTipo").html("");
-    //DA FARE CB
-    //$("#filtro_Copyright").html("");
-
-    $("#filtro_Inventari").html("");
-    $("#filtro_Committenza").html("");
-    $("#filtro_TipoSupporto").html("");
-    $("#filtro_IdenVolume").html("");
     $("#btn_annotazioni").html("");
-
     for (var i in foto) {
         foto[i].visibile = true;
     }
-    Storage();
     showContatore();
 }
 
@@ -115,7 +71,7 @@ function getFotoAll() {
 function filtraSoggetto() {
 
     s = $("#txtSoggetto").val().toUpperCase();
-    $("#filtro_txtSoggetto").append(s + ' ');
+    $("#filtro_txtSoggetto").append(s + ' ; ');
     switch ($("#Tipo_ricerca").val()) {
         //AND
         case "0":
@@ -128,60 +84,106 @@ function filtraSoggetto() {
                 }
             }
             break;
-        //OR
+            //OR
         case "1":
             for (var i in foto) {
-                    trovato = foto[i].soggetto.includes(s) || foto[i].soggetto_titolo.includes(s);
-                    if (!trovato) {
-                        foto[i].visibile = false;
-                    }
+                trovato = foto[i].soggetto.includes(s) || foto[i].soggetto_titolo.includes(s);
+                if (!trovato) {
+                    foto[i].visibile = false;
+                }
             }
             break;
     }
 
-    Storage();
+
     showContatore();
     Tabella();
 }
-function filtraAlbum() {
 
-    num = parseInt($("#cbAlbum").val());
-    $("#filtro_cbAlbum").append(num + ' ');
+//function filtraAlbum() {
+//    num = parseInt($("#cbAlbum").val());
+//    $("#filtro_cbAlbum").append(num + ' ');
+//    console.log("entrato");
+//    if (num >= 0) {
 
-    if (num >= 0) {
-        switch ($("#Tipo_ricerca").val()) {
-            //AND
-            case "0":
-                for (var i in foto) {
-                    if (foto[i].visibile) {
-                        trovato = foto[i].id_album == num;
-                        if (!trovato) {
-                            foto[i].visibile = false;
-                        }
-                    }
-                }
-                break;
-                //OR
-            case "1":
-                var res = []
-                res = $("#filtro_cbAlbum").text().split(" ");
-                for (var i in foto) {
-                    for (var j = 0; j < res.length - 1; j++) {
-                        if (foto[i].id_album == res[j]) {
-                            foto[i].visibile = true;
-                            break;
-                        } else {
-                            foto[i].visibile = false;
-                        }
-                    }
-                }
-                break;
+//        switch ($("#Tipo_ricerca").val()) {
+//            //AND
+//            case "0":
+
+//                for (var i in foto) {
+//                    console.log(foto[i]);
+//                    if (foto[i].visibile) {
+//                        trovato = foto[i].id_album == num;
+//                        if (!trovato) {
+//                            foto[i].visibile = false;
+//                        }
+//                    }
+//                }
+//                break;
+//            //OR
+//            case "1":
+//                console.log("1");
+//                for (var i in foto) {
+//                    if (foto[i].id_album == num)
+//                    //    foto[i].visibile = true;
+//                    //else
+//                        foto[i].visibile = false;
+//                }
+//                break;
+//        }
+//    }
+//    else {
+//        alert("Album non valido!")
+//    }
+
+//    showContatore();
+//    Tabella();
+//}
+function filtraAlbum(campo,id_cb, id_filtro) {
+
+    if (id_cb == "cbAlbum") {
+        num = parseInt($("#" + id_cb).val());
+        $("#" + id_filtro).append(num + ' ; ');
+
+        if (num < 0) {
+            alert("Album non valido!")
+            return
         }
+    } else {
+        num = $("#" + id_cb).val();
+        $("#" + id_filtro).append($("#" + id_cb + " option:selected").text() + ' ');
+
     }
-    else {
-        alert("Album non valido!")
+
+    switch ($("#Tipo_ricerca").val()) {
+        //AND
+        case "0":
+            for (var i in foto) {
+                if (foto[i].visibile) {
+                    trovato = eval('foto[i]' + '.' + campo) == num;
+                    if (!trovato) {
+                        foto[i].visibile = false;
+                    }
+                }
+            }
+            break;
+            //OR
+        case "1":
+            var res = []
+            res = $("#" + id_filtro).text().split(" ");
+            for (var i in foto) {
+                for (var j = 0; j < res.length - 1; j++) {
+                    if (eval('foto[i]' + '.' + campo) == num) {
+                        foto[i].visibile = true;
+                        break;
+                    } else {
+                        foto[i].visibile = false;
+                    }
+                }
+            }
+            break;
     }
-    Storage();
+
     showContatore();
     Tabella();
 }
@@ -209,20 +211,21 @@ function filtraPeriodo() {
             //OR
         case "1":
             for (var i in foto) {
-                    fdmin = Data_ISO10(new Date(foto[i].data_da));
-                    fdmax = Data_ISO10(new Date(foto[i].data_a));
-                    trovato = fdmin >= sdMin && fdmax <= sdMax;
-                    if (!trovato) {
-                        foto[i].visibile = false;
-                    }
+                fdmin = Data_ISO10(new Date(foto[i].data_da));
+                fdmax = Data_ISO10(new Date(foto[i].data_a));
+                trovato = fdmin >= sdMin && fdmax <= sdMax;
+                if (!trovato) {
+                    foto[i].visibile = false;
+                }
             }
             break;
     }
-    
-    Storage();
+
+
     showContatore();
     Tabella();
 }
+
 function filtraFondo() {
     switch ($("#Tipo_ricerca").val()) {
         //AND
@@ -237,14 +240,13 @@ function filtraFondo() {
             //OR
         case "1":
             for (var i in foto) {
-                    if (foto[i].id_fondo != $("#cbFondo").val())
-                        foto[i].visibile = false;
+                if (foto[i].id_fondo != $("#cbFondo").val())
+                    foto[i].visibile = false;
             }
             break;
     }
-    
-    $("#filtro_Fondo").append($("#cbFondo option:selected").text() + ' ');
-    Storage();
+
+    $("#filtro_Fondo").append($("#cbFondo option:selected").text() + ' ; ');
     showContatore();
     Tabella();
 }
@@ -262,20 +264,24 @@ function filtraSerie() {
             //OR
         case "1":
             for (var i in foto) {
-                    if (foto[i].id_serie != $("#cbSerie").val())
-                        foto[i].visibile = false;
+                if (foto[i].id_serie != $("#cbSerie").val())
+                    foto[i].visibile = false;
             }
             break;
     }
 
-    $("#filtro_Serie").append($("#cbSerie option:selected").text() + ' ');
-    Storage();
+    $("#filtro_Serie").append($("#cbSerie option:selected").text() + ' ; ');
     showContatore();
     Tabella();
 }
 function filtro_Generico(campo, id_txt, id_filtro) {
-
-    $("#" + id_filtro).append($("#" + id_txt).val() + ' ');
+    var combo = false;
+    
+    combo = id_txt.charAt(0) == 'c' && id_txt.charAt(1) == 'b'; 
+    if (combo)
+        $("#" + id_filtro).append($("#" + id_txt + " option:selected").val() + ' ; ');
+    else
+        $("#" + id_filtro).append($("#" + id_txt).val() + ' ; ');
 
     switch ($("#Tipo_ricerca").val()) {
         //AND
@@ -289,25 +295,25 @@ function filtro_Generico(campo, id_txt, id_filtro) {
             break;
             //OR
         case "1":
-            res = $("#" + id_filtro).text().split(" ");
-            console.log("res"+res);
+
+            res = $("#" + id_filtro).text().split(" ; ");
+            //console.log("res" + res);
+
             for (var i in foto) {
                 for (var j = 0; j < res.length - 1; j++) {
                     trovato = eval('foto[i]' + '.' + campo) == res[j];
-                   // console.log(eval('foto[i]' + '.' + campo) +"||||"+ eval($("#" + id_txt).val())+"||||"+trovato);
+                    console.log(eval('foto[i]'));
                     if (trovato) {
                         foto[i].visibile = true;
                         break;
                     }
-                        
+                    if (!trovato)
+                        foto[i].visibile = false;
                 }
-                if(!trovato)
-                    foto[i].visibile = false;
-                //console.log(eval('foto[i]' + '.' + campo) + "||f||" + eval($("#" + id_txt).val()) + "||||" + trovato);
+            }
 
-                }
+
     }
-    Storage();
     showContatore();
     Tabella();
 }
@@ -403,7 +409,8 @@ function Filtro_Publ() {
                 s += '            <td>'
                 s += '                <select id="cbFondo">'
                 fondo.forEach(function (item, index) {
-                    s += '<option value="' + index + '">Fondo ' + item + '</option>'
+                    //s += '<option value="' + index + '">Fondo ' + item + '</option>'
+                    s += '<option value="' + item + '">Fondo ' + item + '</option>'
                 });
                 s += '                </select>'
                 s += '</td>'
@@ -486,7 +493,9 @@ function Filtro_Priv() {
                 s += '            <td>'
                 s += '                <select id="cbFondo">'
                 fondo.forEach(function (item, index) {
-                    s += '<option value="' + index + '">Fondo ' + item + '</option>'
+                    // s += '<option value="' + index + '">Fondo ' + item + '</option>'
+                    s += '<option value="' + item + '">Fondo ' + item + '</option>'
+
                 });
                 s += '                </select>'
                 s += '</td>'
@@ -712,8 +721,8 @@ function Filtro_Priv() {
                 $("#btn_TipoMedia").click(function () { filtro_Generico("tipo_media", "txtTipoMedia", "filtro_TipoMedia"); })
                 $("#btn_TipoScheda").click(function () { filtro_Generico("tiposcheda", "txtTipoScheda", "filtro_TipoScheda"); })
                 $("#btn_archivio").click(function () { filtro_Generico("archivio", "txtArchivio", "filtro_Archivio"); })
-                $("#btn_fondo").click(function () { filtraFondo(); })
-                $("#btn_collocazione").click(function () { filtraAlbum() })
+                $("#btn_fondo").click(function () { filtro_Generico("fondo_provenienza", "cbFondo", "filtro_Fondo"); })
+                $("#btn_collocazione").click(function () { filtraAlbum("id_album","cbAlbum", "filtro_cbAlbum") })
                 $("#btn_num_inventario").click(function () { filtro_Generico("num_inventario", "txtNumInventario", "filtro_NumInventario"); })
                 //soggetto/titolo/intestazione
                 $("#btn_soggetto").click(function () { filtraSoggetto(); })
@@ -723,7 +732,7 @@ function Filtro_Priv() {
                 //$("#btn_soggetto_specifiche").click(function () { filtro_Generico("soggetto_specifiche", "txtSoggSpecifiche", "filtro_SoggSpecifiche"); })
                 $("#btn_num_negativo").click(function () { filtro_Generico("num_negativo", "txtNumNegativo", "filtro_NumNegativo"); })
                 $("#btn_altri_formati").click(function () { filtro_Generico("altri_formati", "txtAltriFormati", "filtro_AltriFormati"); })
-                $("#btn_serie").click(function () { FiltraSerie(); })
+                $("#btn_serie").click(function () { filtro_Generico("serie_titolo", "cbSerie", "filtro_Serie"); })
                 //da modificare
                 $("#btn_serie_titolo").click(function () { filtro_Generico("serie_titolo", "txtSerieTitolo", "filtro_SerieTitolo"); })
                 $("#btn_serie_num_ord").click(function () { filtro_Generico("serie_num_ord", "txtSerieNumOrd", "filtro_SerieNumOrd"); })
