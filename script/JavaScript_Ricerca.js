@@ -8,7 +8,7 @@ function Storage(foto) {
         }
     }
     sessionStorage.idFoto = JSON.stringify(displayFoto);
-    //console.log(displayFoto);
+    console.log(displayFoto);
 
 }
 
