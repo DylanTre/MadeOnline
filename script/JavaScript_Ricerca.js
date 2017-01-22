@@ -178,16 +178,16 @@ function filtraAlbum(campo,id_cb, id_filtro) {
             }
             break;
     }
-
+    Storage();
     showContatore();
     Tabella();
 }
-function filtraPeriodo() {
+function filtraPeriodo(idMin,idMax, idFiltro) {
 
-    sdMin = $("#dMin").val();
-    sdMax = $("#dMax").val();
+    sdMin = $("#" + idMin).val();
+    sdMax = $("#" + idMax).val();
 
-    $("#filtro_Periodo").append(sdMin + '--' + sdMax + ' ');
+    $("#" + idFiltro).append(sdMin + '--' + sdMax + ' ');
 
     switch ($("#Tipo_ricerca").val()) {
         //AND
@@ -380,7 +380,7 @@ function Filtro_Publ() {
                 s += '<tr>'
                 s += '             <td>Soggetto/Titolo/Intestazione contiene: </td>'
                 s += '            <td><input id="txtSoggetto" type="text" /></td>'
-                s += '           <td><input type="button" value="Aggiungi Filtro" onclick="filtraSoggetto()" /></td>'
+                s += '           <td><input type="button" id="btn_soggetto" value="Aggiungi Filtro" /></td>'
                 s += '           <td id="filtro_txtSoggetto"></td>'
                 s += '        </tr>'
                 s += '        <tr>'
@@ -392,13 +392,13 @@ function Filtro_Publ() {
                 });
                 s += '                </select>'
                 s += '           </td>'
-                s += '           <td><input type="button" value="Aggiungi Filtro" onclick="filtraAlbum()" /></td>'
+                s += '           <td><input type="button" id="btn_collocazione" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_cbAlbum"></td>'
                 s += '        </tr>'
                 s += '        <tr>'
                 s += '            <td>Periodo</td>'
                 s += '             <td><input id="dMin" type="date" /> -- <input id="dMax" type="date" /></td>'
-                s += '            <td><input type="button" value="Aggiungi Filtro" onclick="filtraPeriodo()" /></td>'
+                s += '            <td><input type="button" id="btn_periodo" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_Periodo"></td>'
                 s += '        </tr>        '
                 //FONDO
@@ -412,7 +412,7 @@ function Filtro_Publ() {
                 });
                 s += '                </select>'
                 s += '</td>'
-                s += '           <td><input type="button" value="Aggiungi Filtro" onclick="filtraFondo()" /></td>'
+                s += '           <td><input type="button" id="btn_fondo" value="Aggiungi Filtro" /></td>'
                 s += '           <td id="filtro_Fondo"></td>'
                 s += '        </tr>'
                 //SERIE
@@ -425,11 +425,17 @@ function Filtro_Publ() {
                 });
                 s += '                </select>'
                 s += '</td>'
-                s += '           <td><input type="button" value="Aggiungi Filtro" onclick="filtraSerie()" /></td>'
+                s += '           <td><input type="button" id="btn_serie" value="Aggiungi Filtro" /></td>'
                 s += '           <td id="filtro_Serie"></td>'
                 s += '        </tr>'
                 s += '    </table>'
                 $("#filtro").html(s);
+
+                $("#btn_collocazione").click(function () { filtraAlbum("id_album", "cbAlbum", "filtro_cbAlbum") })
+                $("#btn_fondo").click(function () { filtro_Generico("fondo_provenienza", "cbFondo", "filtro_Fondo"); })
+                $("#btn_serie").click(function () { filtro_Generico("serie_titolo", "cbSerie", "filtro_Serie"); })
+                $("#btn_periodo").click(function () { filtraPeriodo("dMin","dMax","filtro_Periodo"); })
+                $("#btn_soggetto").click(function () { filtraSoggetto(); })
             });
         });
     });
@@ -736,7 +742,7 @@ function Filtro_Priv() {
                 $("#btn_serie_num_ord").click(function () { filtro_Generico("serie_num_ord", "txtSerieNumOrd", "filtro_SerieNumOrd"); })
                 //DA FARE CB
                 //$("#btn_condizione").click(function () { filtro_Generico("condizione", "txtCondizione", "filtro_Condizione"); })
-                $("#btn_periodo").click(function () { filtraPeriodo(); })
+                $("#btn_periodo").click(function () { filtraPeriodo("dMin", "dMax", "filtro_Periodo"); })
                 //DA FARE COME PERIODO
                 $("#btn_data_esecuz_da").click(function () { filtro_Generico("data_esecuz_da", "txtDataEsecDa", "filtro_DataEsecDa"); })
                 //DA FARE CB
