@@ -1,0 +1,38 @@
+
+	Cartella CSS: //Contenuto : fogli di stile
+
+		StyleSheet.css   ---> Foglio di stile generico per tutte le pagine
+
+
+	Cartella Script: //Contenuto : script generici
+
+		localConfig.js   ---> Script di configurazione locale del server
+		utils.js         ---> Script per la composizionde dell'url per il web service
+	        TestiImg.js      ---> Script contenente le funzioni per la pagina di testi di visualizzazione delle immagini
+		TestPage.js      ---> Script per la pagina di test fornita dagli insegnanti
+	
+
+	Cartella publ: //cartella contente le pagine publiche
+
+		Sottocartella Script: //script publici a tutte le pagine
+			
+			JavaScript.js ---> Script contenente le funzioni per il recupero di dati e immagini
+
+	
+	Cartella lib: //cartella contente le varie librerie implementate
+		
+		!!Da aggiungere JQueri UI
+		
+	
+	index.html     ---> Pagina principale //sospesa
+	TestiImg.html  ---> Pagina di testi di visualizzazione delle immagini
+	TestPage.html  ---> Pagina di test fornita dagli insegnanti
+
+
+
+CONVENZIONI:
+
+- Se una pagina ha un file JS o un foglio di stile porpri questi devono avere l ostesso nome della pagina
+- Nella mappatura specificare l'elemento (es. Cartella, Sottocartella, file.html, file.js ecc)
+- Utilizzare // per specificare il compito di una directory
+- é prevista la privazione dei beni per i presunti "FRANCESCHI" che eliminano gli spazi fra le righe (indentation bunny for king)
