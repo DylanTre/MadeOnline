@@ -22,6 +22,8 @@ function showContatore() {
         if (foto[i].visibile)
             iCnt++;
     }
+    if (iCnt == 900)
+        iCnt = 0;
     $("#numfoto").html("Trovate " + iCnt + " foto");
 }
 

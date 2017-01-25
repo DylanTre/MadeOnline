@@ -8,8 +8,7 @@ function Storage(foto) {
         }
     }
     sessionStorage.idFoto = JSON.stringify(displayFoto);
-    //console.log(displayFoto);
-
+    console.log(displayFoto);
 }
 
 function Data_ISO10(d) {
@@ -22,6 +21,7 @@ function showContatore() {
         if (foto[i].visibile)
             iCnt++;
     }
+
     $("#numfoto").html("Trovate " + iCnt + " foto");
 }
 
@@ -42,7 +42,6 @@ function azzeraRicerca() {
     for (var i in foto) {
         foto[i].visibile = true;
     }
-    Storage();
     showContatore();
 }
 
@@ -96,7 +95,7 @@ function filtraSoggetto() {
             break;
     }
 
-    Storage();
+    Storage(foto);
     showContatore();
     Tabella();
 }
@@ -164,30 +163,32 @@ function filtraAlbum(campo,id_cb, id_filtro) {
             break;
             //OR
         case "1":
+            var trovato = false;
             var res = []
-            res = $("#" + id_filtro).text().split(" ");
+            res = $("#" + id_filtro).text().split(" ; ");
             for (var i in foto) {
                 for (var j = 0; j < res.length - 1; j++) {
-                    if (eval('foto[i]' + '.' + campo) == num) {
+                    trovato = eval('foto[i]' + '.' + campo) == res[j];
+                    console.log(eval('foto[i]'));
+                    if (trovato) {
                         foto[i].visibile = true;
                         break;
-                    } else {
-                        foto[i].visibile = false;
                     }
+                    if (!trovato)
+                        foto[i].visibile = false;
                 }
             }
-            break;
     }
-
+    Storage(foto);
     showContatore();
     Tabella();
 }
-function filtraPeriodo() {
+function filtraPeriodo(idMin,idMax, idFiltro) {
 
-    sdMin = $("#dMin").val();
-    sdMax = $("#dMax").val();
+    sdMin = $("#" + idMin).val();
+    sdMax = $("#" + idMax).val();
 
-    $("#filtro_Periodo").append(sdMin + '--' + sdMax + ' ');
+    $("#" + idFiltro).append(sdMin + '--' + sdMax + ' ');
 
     switch ($("#Tipo_ricerca").val()) {
         //AND
@@ -216,7 +217,7 @@ function filtraPeriodo() {
             break;
     }
 
-    Storage();
+    Storage(foto);
     showContatore();
     Tabella();
 }
@@ -311,7 +312,7 @@ function filtro_Generico(campo, id_txt, id_filtro) {
 
 
     }
-    Storage();
+    Storage(foto);
     showContatore();
     Tabella();
 }
@@ -380,7 +381,7 @@ function Filtro_Publ() {
                 s += '<tr>'
                 s += '             <td>Soggetto/Titolo/Intestazione contiene: </td>'
                 s += '            <td><input id="txtSoggetto" type="text" /></td>'
-                s += '           <td><input type="button" value="Aggiungi Filtro" onclick="filtraSoggetto()" /></td>'
+                s += '           <td><input type="button" id="btn_soggetto" value="Aggiungi Filtro" /></td>'
                 s += '           <td id="filtro_txtSoggetto"></td>'
                 s += '        </tr>'
                 s += '        <tr>'
@@ -392,13 +393,13 @@ function Filtro_Publ() {
                 });
                 s += '                </select>'
                 s += '           </td>'
-                s += '           <td><input type="button" value="Aggiungi Filtro" onclick="filtraAlbum()" /></td>'
+                s += '           <td><input type="button" id="btn_collocazione" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_cbAlbum"></td>'
                 s += '        </tr>'
                 s += '        <tr>'
                 s += '            <td>Periodo</td>'
                 s += '             <td><input id="dMin" type="date" /> -- <input id="dMax" type="date" /></td>'
-                s += '            <td><input type="button" value="Aggiungi Filtro" onclick="filtraPeriodo()" /></td>'
+                s += '            <td><input type="button" id="btn_periodo" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_Periodo"></td>'
                 s += '        </tr>        '
                 //FONDO
@@ -412,7 +413,7 @@ function Filtro_Publ() {
                 });
                 s += '                </select>'
                 s += '</td>'
-                s += '           <td><input type="button" value="Aggiungi Filtro" onclick="filtraFondo()" /></td>'
+                s += '           <td><input type="button" id="btn_fondo" value="Aggiungi Filtro" /></td>'
                 s += '           <td id="filtro_Fondo"></td>'
                 s += '        </tr>'
                 //SERIE
@@ -425,11 +426,17 @@ function Filtro_Publ() {
                 });
                 s += '                </select>'
                 s += '</td>'
-                s += '           <td><input type="button" value="Aggiungi Filtro" onclick="filtraSerie()" /></td>'
+                s += '           <td><input type="button" id="btn_serie" value="Aggiungi Filtro" /></td>'
                 s += '           <td id="filtro_Serie"></td>'
                 s += '        </tr>'
                 s += '    </table>'
                 $("#filtro").html(s);
+
+                $("#btn_collocazione").click(function () { filtraAlbum("id_album", "cbAlbum", "filtro_cbAlbum") })
+                $("#btn_fondo").click(function () { filtro_Generico("fondo_provenienza", "cbFondo", "filtro_Fondo"); })
+                $("#btn_serie").click(function () { filtro_Generico("serie_titolo", "cbSerie", "filtro_Serie"); })
+                $("#btn_periodo").click(function () { filtraPeriodo("dMin","dMax","filtro_Periodo"); })
+                $("#btn_soggetto").click(function () { filtraSoggetto(); })
             });
         });
     });
@@ -530,14 +537,22 @@ function Filtro_Priv() {
                 //soggetto descrizione
                 s += '        <tr>'
                 s += '            <td>Descrizione Oggetto</td>'
-                s += '             <td><input id="txtSoggDescrizione" type="text" /></td>'
+                s += '             <td>'
+                s += '                <select id="cbSoggDescrizione">'
+                s +=                    '<option value="FOTOGRAFIA">FOTOGRAFIA</option>'
+                s += '                </select>'
+                s += '           </td>'
                 s += '            <td><input type="button" id="btn_soggetto_descrizione" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_SoggDescrizione"></td>'
                 s += '        </tr>'
                 //Sogg Specifiche
                 s += '        <tr>'
                 s += '            <td>Specifiche Oggetto</td>'
-                s += '             <td><input id="txtSoggSpecifiche" type="text" /></td>'
+                s += '             <td>'
+                s += '                <select id="cbSoggSpecifiche">'
+                s += '                  <option value="FOTOGRAFIA B.N.">FOTOGRAFIA B.N.</option>'
+                s += '                </select>'
+                s += '           </td>'
                 s += '            <td><input type="button" id="btn_soggetto_specifiche" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_SoggSpecifiche"></td>'
                 s += '        </tr>'
@@ -568,13 +583,13 @@ function Filtro_Priv() {
                 s += '           <td><input type="button" id="btn_serie" value="Aggiungi Filtro" /></td>'
                 s += '           <td id="filtro_Serie"></td>'
                 s += '        </tr>'
-                //serie titolo
-                s += '        <tr>'
-                s += '            <td>Titolo della serie</td>'
-                s += '             <td><input id="txtSerieTitolo" type="text" /></td>'
-                s += '            <td><input type="button" id="btn_serie_titolo" value="Aggiungi Filtro" /></td>'
-                s += '            <td id="filtro_SerieTitolo"></td>'
-                s += '        </tr>'
+                //serie titolo (stessa cosa di serie)
+                //s += '        <tr>'
+                //s += '            <td>Titolo della serie</td>'
+                //s += '             <td><input id="txtSerieTitolo" type="text" /></td>'
+                //s += '            <td><input type="button" id="btn_serie_titolo" value="Aggiungi Filtro" /></td>'
+                //s += '            <td id="filtro_SerieTitolo"></td>'
+                //s += '        </tr>'
                 //serie num ord
                 s += '        <tr>'
                 s += '            <td>Nr.ordine nella serie</td>'
@@ -585,7 +600,12 @@ function Filtro_Priv() {
                 //condizione
                 s += '        <tr>'
                 s += '            <td>Condizione</td>'
-                s += '             <td><input id="txtCondizione" type="text" /></td>'
+                s += '             <td>'
+                s += '                <select id="cbCondizione">'
+                s += '                  <option value="BUONO">BUONO</option>'
+                s += '                  <option value="DISCRETO">DISCRETO</option>'
+                s += '                </select>'
+                s += '           </td>'
                 s += '            <td><input type="button" id="btn_condizione" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_Condizione"></td>'
                 s += '        </tr>'
@@ -608,8 +628,13 @@ function Filtro_Priv() {
                 //Validità Data esec.-Da
                 s += '        <tr>'
                 s += '            <td>Validità Data esec. Da</td>'
-                s += '             <td><input id="txtDataEsecDaValid" type="data" /></td>'
-                s += '            <td><input type="button" btn_data_esecuz_da_valid" value="Aggiungi Filtro" /></td>'
+                s += '             <td>'
+                s += '                <select id="cbDataEsecDaValid">'
+                s += '                  <option value="PRESUNTA">PRESUNTA</option>'
+                s += '                  <option value="CERTO">CERTO</option>'
+                s += '                </select>'
+                s += '           </td>'
+                s += '            <td><input type="button" id="btn_data_esecuz_da_valid" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_DataEsecDaValid"></td>'
                 s += '        </tr>'
                 //data esec a
@@ -633,13 +658,13 @@ function Filtro_Priv() {
                 s += '            <td><input type="button" id="btn_osservazioni" value="Aggiungi Filtro"  /></td>'
                 s += '            <td id="filtro_Osservazioni"></td>'
                 s += '        </tr>'
-                //fondo provenienza
-                s += '        <tr>'
-                s += '            <td>Fondo di provenienza</td>'
-                s += '             <td><input id="txtFondoProvenienza" type="text" /></td>'
-                s += '            <td><input type="button" id="btn_fondo_provenienza" value="Aggiungi Filtro" /></td>'
-                s += '            <td id="filtro_FondoProvenienza"></td>'
-                s += '        </tr>'
+                //fondo provenienza (stessa cosa di fondo)
+                //s += '        <tr>'
+                //s += '            <td>Fondo di provenienza</td>'
+                //s += '             <td><input id="txtFondoProvenienza" type="text" /></td>'
+                //s += '            <td><input type="button" id="btn_fondo_provenienza" value="Aggiungi Filtro" /></td>'
+                //s += '            <td id="filtro_FondoProvenienza"></td>'
+                //s += '        </tr>'
                 //fondo provenienza luogo
                 s += '        <tr>'
                 s += '            <td>Luogo Fondo di provenienza</td>'
@@ -657,21 +682,35 @@ function Filtro_Priv() {
                 //acquisizione data valida
                 s += '        <tr>'
                 s += '            <td>Validità Data di acquisizione</td>'
-                s += '             <td><input id="txtAcquisizioneDataValida" type="data" /></td>'
+                s += '             <td>'
+                s += '                <select id="cbAcquisizioneDataValida">'
+                s += '                  <option value="CERTO">CERTO</option>'
+                s += '                </select>'
+                s += '           </td>'
                 s += '            <td><input type="button" id="btn_acquisizione_data_valid" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_AcquisizioneDataValida"></td>'
                 s += '        </tr>'
                 //acquisizione tipo
                 s += '        <tr>'
                 s += '            <td>Tipo di acquisizione</td>'
-                s += '             <td><input id="txtAcquisizioneTipo" type="text" /></td>'
+                s += '             <td>'
+                s += '                <select id="cbAcquisizioneTipo">'
+                s += '                  <option value="DONAZIONE">DONAZIONE</option>'
+                s += '                  <option value="CONVENZIONE">CONVENZIONE</option>'
+                s += '                  <option value="ACQUISTO">ACQUISTO</option>'
+
+                s += '                </select>'
+                s += '           </td>'
                 s += '            <td><input type="button" id="btn_acquisizione_tipo" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_AcquisizioneTipo"></td>'
                 s += '        </tr>'
                 //copyright
                 s += '        <tr>'
                 s += '            <td>Copyright</td>'
-                s += '             <td><input id="txtCopyright" type="text" /></td>'
+                s += '             <td>'
+                s += '                <select id="cbCopyright">'
+                s += '                </select>'
+                s += '           </td>'
                 s += '            <td><input type="button" id="btn_copyright" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_Copyright"></td>'
                 s += '        </tr>'
@@ -724,36 +763,31 @@ function Filtro_Priv() {
                 $("#btn_num_inventario").click(function () { filtro_Generico("num_inventario", "txtNumInventario", "filtro_NumInventario"); })
                 //soggetto/titolo/intestazione
                 $("#btn_soggetto").click(function () { filtraSoggetto(); })
-                //DA FARE CB
-                //$("#btn_soggetto_descrizione").click(function () { filtro_Generico("soggetto_descrizione", "txtSoggDescrizione", "filtro_SoggDescrizione"); })
-                //DA FARE CB
-                //$("#btn_soggetto_specifiche").click(function () { filtro_Generico("soggetto_specifiche", "txtSoggSpecifiche", "filtro_SoggSpecifiche"); })
+                $("#btn_soggetto_descrizione").click(function () { filtro_Generico("soggetto_descrizione", "cbSoggDescrizione", "filtro_SoggDescrizione"); })
+                $("#btn_soggetto_specifiche").click(function () { filtro_Generico("soggetto_specifiche", "cbSoggSpecifiche", "filtro_SoggSpecifiche"); })
                 $("#btn_num_negativo").click(function () { filtro_Generico("num_negativo", "txtNumNegativo", "filtro_NumNegativo"); })
                 $("#btn_altri_formati").click(function () { filtro_Generico("altri_formati", "txtAltriFormati", "filtro_AltriFormati"); })
                 $("#btn_serie").click(function () { filtro_Generico("serie_titolo", "cbSerie", "filtro_Serie"); })
                 //da modificare
-                $("#btn_serie_titolo").click(function () { filtro_Generico("serie_titolo", "txtSerieTitolo", "filtro_SerieTitolo"); })
+                //$("#btn_serie_titolo").click(function () { filtro_Generico("serie_titolo", "cbSerieTitolo", "filtro_SerieTitolo"); })
                 $("#btn_serie_num_ord").click(function () { filtro_Generico("serie_num_ord", "txtSerieNumOrd", "filtro_SerieNumOrd"); })
                 //DA FARE CB
-                //$("#btn_condizione").click(function () { filtro_Generico("condizione", "txtCondizione", "filtro_Condizione"); })
-                $("#btn_periodo").click(function () { filtraPeriodo(); })
+                $("#btn_condizione").click(function () { filtro_Generico("condizione", "cbCondizione", "filtro_Condizione"); })
+                $("#btn_periodo").click(function () { filtraPeriodo("dMin", "dMax", "filtro_Periodo"); })
                 //DA FARE COME PERIODO
                 $("#btn_data_esecuz_da").click(function () { filtro_Generico("data_esecuz_da", "txtDataEsecDa", "filtro_DataEsecDa"); })
                 //DA FARE CB
-                //$("#btn_data_esecuz_da_valid").click(function () { filtro_Generico("data_esecuz_da_valid", "txtDataEsecDaValid", "filtro_DataEsecDaValid"); })
+                $("#btn_data_esecuz_da_valid").click(function () { filtro_Generico("data_esecuz_da_valid", "cbDataEsecDaValid", "filtro_DataEsecDaValid"); })
                 //DA FARE COME PERIODO
                 $("#btn_data_esecuz_a").click(function () { filtro_Generico("data_esecuz_a", "txtDataEsecA", "filtro_DataEsecA"); })
                 $("#btn_data_esecuz_a_valid").click(function () { filtro_Generico("data_esecuz_a_valid", "txtDataEsecAValid", "filtro_DataEsecAValid"); })
                 $("#btn_osservazioni").click(function () { filtro_Generico("osservazioni", "txtOsservazioni", "filtro_Osservazioni"); })
-                $("#btn_fondo_provenienza").click(function () { filtro_Generico("fondo_provenienza", "txtFondoProvenienza", "filtro_FondoProvenienza"); })
+                //$("#btn_fondo_provenienza").click(function () { filtro_Generico("fondo_provenienza", "cbFondoProvenienza", "filtro_FondoProvenienza"); })
                 $("#btn_fondo_provenienza_luogo").click(function () { filtro_Generico("fondo_provenienza_luogo", "txtFondoProvenienzaLuogo", "filtro_FondoProvenienzaLuogo"); })
                 $("#btn_acquisizione_data").click(function () { filtro_Generico("acquisizione_data", "txtAcquisizioneData", "filtro_AcquisizioneData"); })
-                //DA FARE CB
-                $("#btn_acquisizione_data_valid").click(function () { filtro_Generico("acquisizione_data_valid", "txtAcquisizioneDataValida", "filtro_AcquisizioneDataValida"); })
-                //DA FARE CB
-                //$("#btn_acquisizione_tipo").click(function () { filtro_Generico("acquisizione_tipo", "txtAcquisizioneTipo", "filtro_AcquisizioneTipo"); })
-                //DA FARE CB
-                //$("#btn_copyright").click(function () { filtro_Generico("copyright", "txtCopyright", "filtro_Copyright"); })
+                $("#btn_acquisizione_data_valid").click(function () { filtro_Generico("acquisizione_data_valid", "cbAcquisizioneDataValida", "filtro_AcquisizioneDataValida"); })
+                $("#btn_acquisizione_tipo").click(function () { filtro_Generico("acquisizione_tipo", "cbAcquisizioneTipo", "filtro_AcquisizioneTipo"); })
+                $("#btn_copyright").click(function () { filtro_Generico("copyright", "cbCopyright", "filtro_Copyright"); })
                 $("#btn_inventari").click(function () { filtro_Generico("inventari", "txtInventari", "filtro_Inventari"); })
                 $("#btn_committenza").click(function () { filtro_Generico("committenza", "txtCommittenza", "filtro_Committenza"); })
                 $("#btn_tipo_supporto").click(function () { filtro_Generico("tipo_supporto", "txtTipoSupporto", "filtro_TipoSupporto"); })
@@ -764,8 +798,9 @@ function Filtro_Priv() {
     });
 }
 
+
 function creaFiltro(refresh) {
-    
+
     switch ($("#Tipo_campi").val()) {
         //Campi privati
         case "0":
