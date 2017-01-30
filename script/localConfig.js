@@ -18,3 +18,41 @@ var MaDe_Config =
 	    "guid": "094C4271-7FB0-4070-985E-26EC39EBACF5"
 	};
 
+function CreaMenu()
+{
+    var s = "";
+    s+= "<nav>";
+    s+= "   <ul>";
+    s+= "   <li>";
+    s += '<a id="index" href="../index.html">Home</a>';
+    s += '</li>';
+    s += '<li>';
+    s += '<a id="ricerca"href="../ricerca.html">Ricerca</a>';
+    s += '</li>';
+    s += '<li>';
+    s += '<a id="TestImg"href="../TestImg.html">Galleria</a>';
+    s += '</li>';
+    s += '<li>';
+    s += '<a id="Info"href="../Info.html"> Informazioni</a>';
+    s += '</li>';
+    s += '<li>';
+    s += '<a id="RicercaPrivata" href="../priv/RicercaPrivata.html">Area Riservata</a>';
+    s += '</li>';
+    s+=   "</ul>";
+    s += "</nav>";
+    $("#menu").html(s);
+}
+
+//s += '<a href="index.html"<div id="menu" />Home</a>';
+//s += '</li>';
+//s += '<a href="ricerca.html" class="active"<div id="menu" />Ricerca</a>';
+//s += '</li>';
+//s += '<li>';
+//s += '<a href="TestImg.html"<div id="menu" />Galleria</a>';
+//s += '</li>';
+//s += '<li>';
+//s += '<a href="Info.html" <div id="menu" />Info</a>';
+//s += '</li>';
+//s += '<li>';
+//s += '<a href="priv/RicercaPrivata.html"<div id="menu" />Area Riservata</a>';
+//s += '</li>';

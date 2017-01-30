@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Web Service - Test Page</title>
+    <meta charset="utf-8" />
+    <meta charset="utf-8" />
+    <link href="css/StyleSheet.css" rel="stylesheet" />
+    <script src="publ/script/localConfig.js"></script>
+    <script src="publ/script/utils.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="publ/script/JavaScript.js"></script>
+</head>
+<body>
+    <center>
+        <h1>Progetto "MaDe"</h1>
+        <h2>Museo della guerra Web Service - Test Page</h2>
+        <script>
+            document.write("<h2>Web Service = " + MaDe_Config.server_REST + "</h2>")
+        </script>
+        <hr />
+        <br />
+        <div>
+            <select id="Tipo_campi">
+                <option value="0">Campi privati</option>
+                <option value="1">Campi pubblici</option>
+            </select>
+            <select id="scelta">
+                <option value="/Dati/Album/">Tutte le foto di un id_album</option> <!--Nome album-->
+                <option value="/Dati/All/Contiene/">Solo i dati che contengo la stringa inserita in soggetto, soggetto_titolo oppure intestazione.</option>
+                <option value="/Dati/Codice/">Dati di una singola foto, identificata da :codice</option>
+                <option class="CercaData" value="/Dati/Data/BW/">Foto scattate in un dato periodo</option>
+                <option class="CercaData" value="/Dati/Data/EQ/">Foto scattate in una certa data</option>
+                <option class="CercaData" value="/Dati/Data/GE/">Foto scattate dopo una data</option>
+                <option class="CercaData" value="/Dati/Data/Giorno/">Foto scattate in una data esatta</option>
+                <option class="CercaData" value="/Dati/Data/LE/">Foto scattate prima di una data</option>
+                <option value="/Dati/Data/Valid/">Foto con data CERTA o PRESUNTA</option>
+                <option value="/Dati/Intestazione/Contiene/">Solo i dati che contengo il valore inserito nell'intestazione</option>
+                <option value="/Dati/Serie/">Tutte le foto di una serie</option>
+                <option value="/Dati/Soggetto/Contiene/">Solo i dati che contengo :stringa in soggetto</option>
+                <option value="/Dati/Titolo/Contiene/">Solo i dati che contengo :stringa in soggetto_titolo</option>
+            </select>
+
+            <input type="text" id="inputSelection" name="input" value="" />
+            <input hidden="hidden" id="data" type="date"/>
+            <input id="Cerca" class="butt" type="button" value="Cerca"/>
+        </div>
+        <br />
+        <br />
+        <div id="bookmark">
+
+        </div>
+        <script>
+            function myfunction() {
+
+            $("#scelta option:selected").text();
+            $("#Cerca").click(function () { getFotoAllContiene(); })
+            $("#scelta").change(function () {
+                if ($("#scelta option:selected").hasClass("CercaData")) {
+                    $("#data").show();
+                    $("#inputSelection").hide();
+                }
+                else {
+                    $("#data").hide();
+                    $("#inputSelection").show();
+                }
+            });
+            }
+
+        </script>
+        <br />
+        <hr />
+    </center>
+    <script>
+        $(document).ready(function () {
+            getFotoAll();
+            $("#scelta").change(function () {
+                $("option").css("text-align", "center");
+            })
+            $("#ModeImg").click(function () {
+
+            })
+            myfunction();
+        });
+    </script>
+</body>
+</html>
+

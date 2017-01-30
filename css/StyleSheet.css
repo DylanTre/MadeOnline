@@ -29,3 +29,67 @@ select{
 .titolo{
     font-size:20px;
 }
+
+
+/*ROBA PROVVISORIA PER IL MENU*/
+
+/*nav {
+    /*color: red;
+    clear:both;
+}
+
+
+
+
+nav {
+    width: 100%;
+   background-color: #333;
+}
+
+    nav li {
+        list-style: none;
+        width: auto;
+        height: 20px;
+        line-height: 20px;
+        line-break: auto;
+        text-align: center;
+        display:inline;
+    }
+   
+        nav li a {
+            color: white;
+            text-decoration: none;
+            padding:20px;
+        }*/
+
+/*\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+ body{
+  font-size:14px;
+}
+nav a:hover {
+    transition: .5s background-color;
+    background-color: red;
+    padding: 20px;
+    box-shadow: 3px 3px #363636;
+}
+
+.container{
+ max-width:960px;
+  margin:0 auto;
+}
+nav ul li{
+  list-style:none;
+  float:left;
+  padding-right:20px;
+}
+nav ul li a{
+  text-decoration:none;
+  color:#222;
+  background-color:#ccc;
+  padding:4px 5px;
+}
+.active{
+    background-color: red;
+    padding: 20px;
+    box-shadow: 3px 3px #363636;
+}

@@ -11,9 +11,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="publ/script/JavaScript.js"></script>
     <script src="../script/TestImg.js"></script>
+    <script src="script/localConfig.js"></script>
 </head>
 <body>
+    <div id="menu"></div>
     <center>
+
         <h1>Progetto "MaDe"</h1>
         <h2>Museo della guerra Web Service - Test Page</h2>
         <h2 id="titolo"></h2>
@@ -29,5 +32,12 @@
         <br />
         <hr />
     </center>
+    <script>
+        $(document).ready(function () {
+            CreaMenu();
+            // $("#index").addClass("active");
+            $("#" + window.location.pathname.split('/').pop().split('.')[0]).addClass("active");
+        });
+    </script>
 </body>
 </html>

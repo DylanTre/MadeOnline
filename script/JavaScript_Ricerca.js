@@ -286,7 +286,7 @@ function filtro_Generico(campo, id_txt, id_filtro) {
         case "0":
             for (var i in foto) {
                 if (foto[i].visibile) {
-                    if (eval('foto[i]' + '.' + campo) != $("#" + id_txt).val())
+                    if (eval('foto[i]' + '.' + campo) !== $("#" + id_txt).val())
                         foto[i].visibile = false;
                 }
             }
@@ -348,7 +348,6 @@ function Tabella() {
     $("#bookmark").html(str);
     $("#bookmark").show();
 }
-
 function Filtro_Publ() {
     //CAMPI RICERCA PUBBLICI:
     // V= fatto O=da fare
@@ -799,23 +798,23 @@ function Filtro_Priv() {
 }
 
 
-function creaFiltro(refresh) {
+//function creaFiltro(refresh) {
 
-    switch ($("#Tipo_campi").val()) {
-        //Campi privati
-        case "0":
-            if (refresh == true)
-                window.location.href = "/priv/RicercaPrivata.html";
-            Filtro_Priv();
-            break;
-            //Campi pubblici
-        case "1":
-            if (refresh == true)
-                window.location.href = "../ricerca.html";
-            Filtro_Publ();
-            break;
+//    switch ($("#Tipo_campi").val()) {
+//        //Campi privati
+//        case "0":
+//            if (refresh == true)
+//                window.location.href = "/priv/RicercaPrivata.html";
+//            Filtro_Priv();
+//            break;
+//            //Campi pubblici
+//        case "1":
+//            if (refresh == true)
+//                window.location.href = "../ricerca.html";
+//            Filtro_Publ();
+//            break;
 
-        default:
-            Filtro_Publ();
-    }
-}
+//        default:
+//            Filtro_Publ();
+//    }
+//}
