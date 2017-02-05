@@ -35,6 +35,8 @@ function azzeraRicerca() {
     //cancello tutti i filtri aggiunti
     $('td[id^=filtro]').text("");
 
+    $("input[type=date]").val("1914-01-01");
+
     $("#dMin").val("1914-01-01");
     $("#dMax").val("1918-12-31");
 
@@ -105,11 +107,9 @@ function filtraSoggetto() {
 //    $("#filtro_cbAlbum").append(num + ' ');
 //    console.log("entrato");
 //    if (num >= 0) {
-
 //        switch ($("#Tipo_ricerca").val()) {
 //            //AND
 //            case "0":
-
 //                for (var i in foto) {
 //                    console.log(foto[i]);
 //                    if (foto[i].visibile) {
@@ -135,7 +135,6 @@ function filtraSoggetto() {
 //    else {
 //        alert("Album non valido!")
 //    }
-
 //    showContatore();
 //    Tabella();
 //}
@@ -183,20 +182,28 @@ function filtraAlbum(campo,id_cb, id_filtro) {
     showContatore();
     Tabella();
 }
-function filtraPeriodo(idMin,idMax, idFiltro) {
-
+function filtraPeriodo(idMin, idMax, idFiltro, idCampoDa, idCampoA) {
+    var due_campi = (idCampoA !== "" || idCampoA !== undefined || idCampoA !== null);
     sdMin = $("#" + idMin).val();
-    sdMax = $("#" + idMax).val();
-
+    
+    if (idMax == null || idMax == undefined || idMax == "")
+    {
+        sdMax = Data_ISO10(new Date());//  new Date();
+    }
+    else
+    {
+        sdMax = $("#" + idMax).val();
+    }
     $("#" + idFiltro).append(sdMin + '--' + sdMax + ' ');
 
+    fdmax = sdMax;
     switch ($("#Tipo_ricerca").val()) {
         //AND
         case "0":
             for (var i in foto) {
                 if (foto[i].visibile) {
-                    fdmin = Data_ISO10(new Date(foto[i].data_da));
-                    fdmax = Data_ISO10(new Date(foto[i].data_a));
+                    fdmin = Data_ISO10(new Date(eval('foto[i]' + '.' + idCampoDa)));
+                    if(due_campi) fdmax = Data_ISO10(new Date(eval('foto[i]' + '.' + idCampoA)));
                     trovato = fdmin >= sdMin && fdmax <= sdMax;
                     if (!trovato) {
                         foto[i].visibile = false;
@@ -207,8 +214,8 @@ function filtraPeriodo(idMin,idMax, idFiltro) {
             //OR
         case "1":
             for (var i in foto) {
-                fdmin = Data_ISO10(new Date(foto[i].data_da));
-                fdmax = Data_ISO10(new Date(foto[i].data_a));
+                fdmin = Data_ISO10(new Date(eval('foto[i]' + '.' + idCampoDa)));
+                if (due_campi) fdmax = Data_ISO10(new Date(eval('foto[i]' + '.' + idCampoA)));
                 trovato = fdmin >= sdMin && fdmax <= sdMax;
                 if (!trovato) {
                     foto[i].visibile = false;
@@ -241,7 +248,6 @@ function filtraPeriodo(idMin,idMax, idFiltro) {
 //            }
 //            break;
 //    }
-
 //    $("#filtro_Fondo").append($("#cbFondo option:selected").text() + ' ; ');
 //    Storage();
 //    showContatore();
@@ -266,7 +272,6 @@ function filtraPeriodo(idMin,idMax, idFiltro) {
 //            }
 //            break;
 //    }
-
 //    $("#filtro_Serie").append($("#cbSerie option:selected").text() + ' ; ');
 //    Storage();
 //    showContatore();
@@ -286,7 +291,7 @@ function filtro_Generico(campo, id_txt, id_filtro) {
         case "0":
             for (var i in foto) {
                 if (foto[i].visibile) {
-                    if (eval('foto[i]' + '.' + campo) !== $("#" + id_txt).val())
+                    if (eval('foto[i]' + '.' + campo) != $("#" + id_txt).val())
                         foto[i].visibile = false;
                 }
             }
@@ -619,8 +624,8 @@ function Filtro_Priv() {
 
                 //Data di esecuzione-Da
                 s += '        <tr>'
-                s += '            <td>Data di esecuzione Da</td>'
-                s += '             <td><input id="txtDataEsecDa" type="data" /></td>'
+                s += '            <td>Data di esecuzione Da--A</td>'
+                s += '             <td><input id="txtDataEsecDa" type="date" />  -- <input id="txtDataEsecA" type="date" /></td>'
                 s += '            <td><input type="button" id="btn_data_esecuz_da" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_DataEsecDa"></td>'
                 s += '        </tr>'
@@ -637,16 +642,21 @@ function Filtro_Priv() {
                 s += '            <td id="filtro_DataEsecDaValid"></td>'
                 s += '        </tr>'
                 //data esec a
-                s += '        <tr>'
-                s += '            <td>Data Esecuzione a</td>'
-                s += '             <td><input id="txtDataEsecA" type="data" /></td>'
-                s += '            <td><input type="button" id="btn_data_esecuz_a" value="Aggiungi Filtro" /></td>'
-                s += '            <td id="filtro_DataEsecA"></td>'
-                s += '        </tr>'
+                //s += '        <tr>'
+                //s += '            <td>Data Esecuzione a</td>'
+                //s += '             <td><input id="txtDataEsecA" type="date" /></td>'
+                //s += '            <td><input type="button" id="btn_data_esecuz_a" value="Aggiungi Filtro" /></td>'
+                //s += '            <td id="filtro_DataEsecA"></td>'
+                //s += '        </tr>'
                 //data esec a valida
                 s += '        <tr>'
                 s += '            <td>Data Esecuzione Valida a</td>'
-                s += '             <td><input id="txtDataEsecAValid" type="data" /></td>'
+                s += '          <td>'
+                s += '                <select id="cbDataEsecAValid">'
+                s += '                  <option value="PRESUNTA">PRESUNTA</option>'
+                s += '                  <option value="CERTO">CERTO</option>'
+                s += '                </select>'
+                s += '           </td>'
                 s += '            <td><input type="button" id="btn_data_esecuz_a_valid" value="Aggiungi Filtro"  /></td>'
                 s += '            <td id="filtro_DataEsecAValid"></td>'
                 s += '        </tr>'
@@ -674,7 +684,7 @@ function Filtro_Priv() {
                 //acquisizione data
                 s += '        <tr>'
                 s += '            <td>Data di acquisizione</td>'
-                s += '             <td><input id="txtAcquisizioneData" type="data" /></td>'
+                s += '             <td><input id="txtAcquisizioneData" type="date" /></td>'
                 s += '            <td><input type="button" id="btn_acquisizione_data" value="Aggiungi Filtro" /></td>'
                 s += '            <td id="filtro_AcquisizioneData"></td>'
                 s += '        </tr>'
@@ -772,13 +782,15 @@ function Filtro_Priv() {
                 $("#btn_serie_num_ord").click(function () { filtro_Generico("serie_num_ord", "txtSerieNumOrd", "filtro_SerieNumOrd"); })
                 //DA FARE CB
                 $("#btn_condizione").click(function () { filtro_Generico("condizione", "cbCondizione", "filtro_Condizione"); })
-                $("#btn_periodo").click(function () { filtraPeriodo("dMin", "dMax", "filtro_Periodo"); })
+                $("#btn_periodo").click(function () { filtraPeriodo("dMin", "dMax", "filtro_Periodo", "data_da","data_a"); })
+
                 //DA FARE COME PERIODO
-                $("#btn_data_esecuz_da").click(function () { filtro_Generico("data_esecuz_da", "txtDataEsecDa", "filtro_DataEsecDa"); })
+                $("#btn_data_esecuz_da").click(function () { filtraPeriodo("txtDataEsecDa", "txtDataEsecA", "filtro_DataEsecDa", "data_esecuz_da", "data_esecuz_a"); })
                 //DA FARE CB
                 $("#btn_data_esecuz_da_valid").click(function () { filtro_Generico("data_esecuz_da_valid", "cbDataEsecDaValid", "filtro_DataEsecDaValid"); })
                 //DA FARE COME PERIODO
-                $("#btn_data_esecuz_a").click(function () { filtro_Generico("data_esecuz_a", "txtDataEsecA", "filtro_DataEsecA"); })
+                //UNITA CON data_esecuz_da
+                //$("#btn_data_esecuz_a").click(function () { filtraPeriodo("txtDataEsecuz_a", "txtDataEsecA", "filtro_DataEsecA", "data_esecuz_a"); })
                 $("#btn_data_esecuz_a_valid").click(function () { filtro_Generico("data_esecuz_a_valid", "txtDataEsecAValid", "filtro_DataEsecAValid"); })
                 $("#btn_osservazioni").click(function () { filtro_Generico("osservazioni", "txtOsservazioni", "filtro_Osservazioni"); })
                 //$("#btn_fondo_provenienza").click(function () { filtro_Generico("fondo_provenienza", "cbFondoProvenienza", "filtro_FondoProvenienza"); })
