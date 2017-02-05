@@ -344,7 +344,10 @@ function Tabella() {
                 sdata = sMin + " -- " + sMax;
             }
             str += '<td class="txtCenter">' + sdata + '</td>';
-            str += '<td class="txtCenter"><a href="../Dettagli.html?ID=' + foto[i].codice + '" target="_blank" ><img src="' + ico64 + '" ></a></td>';
+            if(window.location.href.indexOf("/priv/")>0)
+                str += '<td class="txtCenter"><a href="/priv/DettagliPrivati.html?ID=' + foto[i].codice + '" target="_blank" ><img src="' + ico64 + '" ></a></td>';
+            else
+                str += '<td class="txtCenter"><a href="../Dettagli.html?ID=' + foto[i].codice + '" target="_blank" ><img src="' + ico64 + '" ></a></td>';
             str += '<tr>';
         }
     }

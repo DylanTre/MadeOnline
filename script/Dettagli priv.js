@@ -14,8 +14,8 @@ $(document).ready(function () {
             index = i;
         }
     }
+    $.getJSON(MaDe_Config.server_REST + "/" + MaDe_Config.guid + "/Dati/Codice/" + aval[1], function (data) {
 
-    $.getJSON(MaDe_Config.server_REST + "/Dati/Codice/" + aval[1], function (data) {
 
         test(data);
     })
@@ -27,7 +27,7 @@ $(document).ready(function () {
         }
         index++;
         console.log(index);
-        $.getJSON(MaDe_Config.server_REST + "/Dati/Codice/" + listaCodici[index], function (data) {
+        $.getJSON(MaDe_Config.server_REST + "/" + MaDe_Config.guid + "/Dati/Codice/" + listaCodici[index], function (data) {
             test(data);
         })
     });
@@ -40,7 +40,7 @@ $(document).ready(function () {
 
         index--;
 
-        $.getJSON(MaDe_Config.server_REST + "/Dati/Codice/" + listaCodici[index], function (data) {
+        $.getJSON(MaDe_Config.server_REST + "/" + MaDe_Config.guid + "/Dati/Codice/" + listaCodici[index], function (data) {
             test(data);
         })
     });
