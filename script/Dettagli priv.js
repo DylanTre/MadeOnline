@@ -10,7 +10,7 @@ $(document).ready(function () {
     listaCodici = JSON.parse(sessionStorage.idFoto);
 
     for (var i = 0; i < listaCodici.length; i++) {
-        if (listaCodici[i] == aval[1]) {
+        if (String(listaCodici[i] === aval[1])) {
             index = i;
         }
     }
@@ -18,23 +18,23 @@ $(document).ready(function () {
 
 
         test(data);
-    })
+    });
 
     $("#btnSucc").click(function () {
 
-        if (index == listaCodici.length - 1) {
+        if (index === listaCodici.length - 1) {
             index = -1;
         }
         index++;
         console.log(index);
         $.getJSON(MaDe_Config.server_REST + "/" + MaDe_Config.guid + "/Dati/Codice/" + listaCodici[index], function (data) {
             test(data);
-        })
+        });
     });
 
     $("#btnPrec").click(function () {
 
-        if (index == 0) {
+        if (index === 0) {
             index = listaCodici.length;
         }
 
@@ -42,7 +42,7 @@ $(document).ready(function () {
 
         $.getJSON(MaDe_Config.server_REST + "/" + MaDe_Config.guid + "/Dati/Codice/" + listaCodici[index], function (data) {
             test(data);
-        })
+        });
     });
 });
 
@@ -71,19 +71,14 @@ function test(data) {
     $('#dettaglio').html(tab);
 }
 
-
 function checkUndef(v) {
-    if (v == undefined) {
+    if (v === undefined) {
         return "";
     }
     else {
         return v;
     }
 }
-
-
-
-
 
 var fldDesc = [
    {
