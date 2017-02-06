@@ -63,7 +63,7 @@ function test(data) {
 
         tab += '<tr class = "riga">';
         tab += '<td class = "colonnaL">' + fldDesc[i].caption + '</td>';
-        tab += '<td class = "colonnaR">' + checkUndef(eval('data[0].' + f)) + '</td>';
+        tab += '<td class = "colonnaR">'  + checkUndef(data[0][f]) + '</td>';
         tab += '</tr>';
     }
     tab += '</table>';
@@ -72,7 +72,7 @@ function test(data) {
 }
 
 function checkUndef(v) {
-    if (v === undefined) {
+    if (v === undefined || v === null) {
         return "";
     }
     else {
