@@ -328,38 +328,52 @@ function filtro_Generico(campo, id_txt, id_filtro) {
 function Tabella() {
     var str = '';
     str += "<table>";
-    str += "<tr><th>ID Album</th><th>Soggetto/Titolo</th><th>Periodo</th><th>Foto</th></tr>";
-    for (var i in foto) {
-        if (foto[i].visibile) {
+    //str += "<tr><th>ID Album</th><th>Soggetto/Titolo</th><th>Periodo</th><th>Foto</th></tr>";
+    str += '<tr>';
+    for (var i in foto)
+    {
+        if (foto[i].visibile)
+        {
             var path = makeImgPath(foto[i].file_path);
             var ico64 = makeIco64Path(foto[i].file_path);
 
-            str += '<tr>';
-            str += '<td class="txtCenter">' + foto[i].id_album + '</td>';
-            str += '<td>' + foto[i].soggetto.trim() + '<br><i>' + foto[i].soggetto_titolo.trim() + '</i></td>';
-            dMin = new Date(foto[i].data_da);
-            dMax = new Date(foto[i].data_a);
-            sMin = dMin.toLocaleDateString();
-            sMax = dMax.toLocaleDateString();
-            if (sMin === sMax) {
-                sdata = sMin;
-            }
-            else {
-                sdata = sMin + " -- " + sMax;
-            }
-            str += '<td class="txtCenter">' + sdata + '</td>';
-            if(window.location.href.indexOf("/priv/")>0)
+            str += '<td>';
+            //str += '<td class="txtCenter">' + foto[i].id_album + '</td>';
+            //str += '<td>' + foto[i].soggetto.trim() + '<br><i>' + foto[i].soggetto_titolo.trim() + '</i></td>';
+            //dMin = new Date(foto[i].data_da);
+            //dMax = new Date(foto[i].data_a);
+            //sMin = dMin.toLocaleDateString();
+            //sMax = dMax.toLocaleDateString();
+            //if (sMin === sMax)
+            //{
+            //    sdata = sMin;
+            //}
+            //else
+            //{
+            //    sdata = sMin + " -- " + sMax;
+            //}
+            //str += '<td class="txtCenter">' + sdata + '</td>';
+            if (window.location.href.indexOf("/priv/") > 0)
+            {
                 str += '<td class="txtCenter"><a href="/priv/DettagliPrivati.html?ID=' + foto[i].codice + '" target="_blank" ><img src="' + ico64 + '" ></a></td>';
+            }
             else
+            {
                 str += '<td class="txtCenter"><a href="../Dettagli.html?ID=' + foto[i].codice + '" target="_blank" ><img src="' + ico64 + '" ></a></td>';
-            str += '<tr>';
+            }
+                
+            str += '</td>';
         }
+
     }
+    str += '</tr>';
     str += "<table>";
 
     $("#bookmark").html(str);
     $("#bookmark").show();
 }
+
+
 function Filtro_Publ() {
     //CAMPI RICERCA PUBBLICI:
     // V= fatto O=da fare
